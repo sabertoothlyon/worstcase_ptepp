@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Worst-Case Scenario Game: Alaska Railroad PTEPP Edition</title>
+    <style>
+        :root {
+            --primary-yellow: #f7c600;
+            --dark-gray: #1a1a1a;
+            --accent-red: #ff4136;
+            --correct-green: #2ecc40;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--primary-yellow);
+            color: var(--dark-gray);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .game-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.2;
+            margin-bottom: 40px;
+        }
+
+        .score-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .score-display {
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: clamp(1rem, 3vw, 2rem);
+            min-width: 200px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .train-car {
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            padding: 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            text-align: center;
+            border: none;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .train-car:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .train-car:active {
+            transform: translateY(-2px);
+        }
+
+        .scenario-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .option-button {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .option-button:hover:not([disabled]) {
+            background: #333;
+            transform: translateX(5px);
+        }
+
+        .option-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-button.selected {
+            background: var(--accent-red);
+        }
+
+        .option-button.correct {
+            background: var(--correct-green);
+        }
+
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .feedback.correct {
+            background: var(--correct-green);
+            color: white;
+        }
+
+        .feedback.incorrect {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        #nextButton {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto 0;
+            padding: 15px 30px;
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+        }
+
+        #nextButton:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .fullscreen img {
+            max-height: 90vh;
+            max-width: 90vw;
+            object-fit: contain;
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); }
+            to { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .score-display {
+                min-width: 150px;
+                font-size: 1rem;
+            }
+
+            .scenario-card {
+                padding: 20px;
+            }
+        }
+ .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .game-button {
+            display: block;
+            padding: 15px 30px;
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .game-button:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .game-button.home-button {
+            background: var(--accent-red);
+        }
+
+        .game-button.home-button:hover {
+            background: #e63a30;
+        }
+
+        @media (max-width: 768px) {
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .game-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+		
+		.hidden-audio {
+            display: none;
+        }
+		
+    </style>
+</head>
+<body>
+
+<audio id="intro-sound" class="hidden-audio">
+        <source src="youre-looking-at.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="fullscreen-image" class="fullscreen">
+        <img src="wcsg.png" alt="Game splash screen">
+    </div>
+    
+    <div class="container hidden" id="main-content">
+        <h1 class="game-title">The Worst-Case Scenario: Alaska Railroad PTEPP Edition</h1>
+        <div class="score-container">
+            <div class="score-display">Team Points: <span id="scoreDisplay">0</span></div>
+            <div class="score-display">Diesel Decisions: <span id="mistakesDisplay">0</span></div>
+        </div>
+        <div class="categories" id="categories"></div>
+        <div id="scenarioCard" class="scenario-card hidden">
+            <h2 id="categoryTitle"></h2>
+            <p id="scenarioText"></p>
+            <div id="options"></div>
+            <div id="feedback" class="feedback hidden"></div>
+            <button id="nextButton" class="hidden">Next</button>
+        </div>
+    </div>
+    
+    <audio id="correct-sound" src="correct.mp3"></audio>
+    <audio id="incorrect-sound" src="incorrect.mp3"></audio>
+    
+    <div id="audio-preload" class="hidden">
+        <audio id="emergency_objective-audio" src="emergency_objective.mp3"></audio>
+        <audio id="evacuation_considerations-audio" src="evacuation_considerations.mp3"></audio>
+        <audio id="training_requirements-audio" src="training_requirements.mp3"></audio>
+        <audio id="first_aid_location-audio" src="first_aid_location.mp3"></audio>
+        <audio id="initial_actions-audio" src="initial_actions.mp3"></audio>
+        <audio id="secondary_actions-audio" src="secondary_actions.mp3"></audio>
+        <audio id="after_assessment-audio" src="after_assessment.mp3"></audio>
+        <audio id="medical_assistance-audio" src="medical_assistance.mp3"></audio>
+        <audio id="emergency_windows-audio" src="emergency_windows.mp3"></audio>
+        <audio id="passenger_egress-audio" src="passenger_egress.mp3"></audio>
+        <audio id="crew_competency-audio" src="crew_competency.mp3"></audio>
+        <audio id="primary_concern-audio" src="primary_concern.mp3"></audio>
+    </div>
+    
+	<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const introSound = document.getElementById('intro-sound');
+            const splashScreen = document.getElementById('fullscreen-image');
+            
+            // Handle both splash screen and audio on click
+            splashScreen.addEventListener('click', function() {
+                // Play the sound
+                introSound.play()
+                    .catch(error => console.log('Error playing audio:', error));
+                
+                // Hide the splash screen
+                splashScreen.style.display = 'none';
+            }, { once: true }); // Only trigger once
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

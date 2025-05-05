@@ -1,0 +1,169 @@
+:root {
+            --primary-yellow: #f7c600;
+            --dark-gray: #1a1a1a;
+            --accent-red: #ff4136;
+            --correct-green: #2ecc40;
+        }
+
+        @font-face {
+            font-family: "Occams Eraser";
+            src: url("Occams Eraser.ttf") format("truetype");
+        }
+
+        body {
+            font-family: "Occams Eraser", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--primary-yellow);
+            color: var(--dark-gray);
+            min-height: 100vh;
+            
+            background-size: 20px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .game-title {
+            font-size: 4em;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1;
+            margin-bottom: 40px;
+        }
+
+        .score-display {
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px;
+            font-size: 2em;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .train-car {
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-align: center;
+            border: 3px solid var(--dark-gray);
+        }
+
+        .train-car:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .scenario-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .option-button {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            border: none;
+            border-radius: 5px;
+            font-family: 'Anton', sans-serif;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .option-button:hover {
+            background: #333;
+        }
+
+        .option-button.selected {
+            background: var(--accent-red);
+        }
+
+        .option-button.correct {
+            background: var(--correct-green);
+        }
+
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .feedback.correct {
+            background: var(--correct-green);
+            color: white;
+        }
+
+        .feedback.incorrect {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #nextButton {
+            background: var(--dark-gray);
+            color: var(--primary-yellow);
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Anton', sans-serif;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+
+        #nextButton:hover {
+            background: #333;
+        }
+
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.fullscreen img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+        .hidden {
+            display: none;
